@@ -1,4 +1,4 @@
-# file-list-expander
+# File Liet Expander
 Typically need to process bunch of files with versatility of how to get list of files to process? 
 This is a simple library to avoid copy-pasting of your own code here and there.
 
