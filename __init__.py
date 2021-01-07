@@ -1,3 +1,3 @@
-from expander import Expander
+from .expander import Expander
 
 __all__ = ['Expander']
