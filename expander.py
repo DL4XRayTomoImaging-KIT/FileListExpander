@@ -1,6 +1,7 @@
 from glob import glob
 import re
 import os
+import yaml
 
 class Expander:
     def __init__(self, list_file_extension='txt', verbosity=False, files_only=True):
@@ -103,5 +104,48 @@ class Expander:
 
         return list_to_return
 
-    def __call__(self, main_addr, regexp=None, regexp_option='contains'):
+    def _unpack_args(self, args, prefix=None):
+        if prefix is None:
+            n_files = 'files'
+            n_regex = 'regexp'
+            n_regex_mode = 'regexp_mode'
+        else:
+            n_files = f'{prefix}_files'
+            n_regex = f'{prefix}_regexp'
+            n_regex_mode = f'{prefix}_regexp_mode'
+
+        return getattr(args, n_files), getattr(args, n_regex), getattr(args, n_regex_mode)
+
+    def __call__(self, main_addr=None, regexp=None, regexp_option='contains', args=None, prefix=None):
+        if args is not None:
+            main_addr, regexp, regexp_option = self._unpack_args(args, prefix)
+
+        if main_addr.endswith('.yaml'):
+            with open(main_addr) as f:
+                conf = yaml.safe_load(f)
+            if 'files' in conf.keys():
+                main_addr = conf['files']
+            if 'regexp' in conf.keys():
+                regexp = conf['regexp']
+            if 'regexp_mode' in conf.keys():
+                regexp_option = conf['regexp_mode']
+
         return self.expand_file_list(main_addr, regexp, regexp_option)
+
+
+def add_args(parser, prefix=None):
+    if prefix is None:
+        n_files = '--files'
+        n_regex = '--regexp'
+        n_regex_mode = '--regexp-mode'
+    else:
+        n_files = f'--{prefix}-files'
+        n_regex = f'--{prefix}-regexp'
+        n_regex_mode = f'--{prefix}-regexp-mode'
+
+
+    parser.add_argument(n_files, help=f'''Files to work with.
+                        It could be either file list (only works with YAML configuration file), directory containing files to be processed, wildcarded path, .txt file containing one file address per line or YAML file containing configuration.
+                        In the latter case, YAML file configuration will overwrite {n_files[2:]}, {n_regex[2:]} and {n_regex_mode[2:]} configuration provided with CLI.''')
+    parser.add_argument(n_regex, default=None, help=f'RegExp to filter files obtained from {n_files} argument. Should be standard python-style regular expression.')
+    parser.add_argument(n_regex_mode, default='includes', help='Mode of RegExp interpretation. Possible ones are [includes, matches, not_includes, not_matches]. Default is includes.')
