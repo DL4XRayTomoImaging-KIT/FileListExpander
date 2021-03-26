@@ -1,3 +1,3 @@
-from .expander import Expander
+from .expander import Expander, add_args
 
-__all__ = ['Expander']
+__all__ = ['Expander', 'add_args']
