@@ -148,4 +148,4 @@ def add_args(parser, prefix=None):
                         It could be either file list (only works with YAML configuration file), directory containing files to be processed, wildcarded path, .txt file containing one file address per line or YAML file containing configuration.
                         In the latter case, YAML file configuration will overwrite {n_files[2:]}, {n_regex[2:]} and {n_regex_mode[2:]} configuration provided with CLI.''')
     parser.add_argument(n_regex, default=None, help=f'RegExp to filter files obtained from {n_files} argument. Should be standard python-style regular expression.')
-    parser.add_argument(n_regex_mode, default='includes', help='Mode of RegExp interpretation. Possible ones are [includes, matches, not_includes, not_matches]. Default is includes.')
+    parser.add_argument(n_regex_mode, default='contains', help='Mode of RegExp interpretation. Possible ones are [includes, matches, not_includes, not_matches]. Default is includes.')
