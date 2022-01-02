@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="flexpand", # Replace with your own username
-    version="0.0.1",
+    version="0.0.2",
     author="Yaroslav Zharov",
     author_email="mart.slaaf@gmail.com",
     description="Utility to expand file names.",
