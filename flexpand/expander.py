@@ -230,7 +230,7 @@ class Matcher(MetaArger):
         if folder is None: # we are trying to write the same folder
            output_files = []
            for a in input_files:
-               output_files.append(os.path.dirname(a), self._get_filename(a, path_step, prefix, extension, name))
+               output_files.append(os.path.join(os.path.dirname(a), self._get_filename(a, path_step, prefix, extension, name)))
         
         elif isinstance(folder, str) and os.path.isdir(folder): # configured as directory to output files
             dirname = folder
